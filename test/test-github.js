@@ -24,8 +24,9 @@ describe('Execute Actions', function () {
     const title = await page.title();
     const x = await page.$("#br-toggle");
     const bb = x && await x.boundingBox();
-    
-    console.log(bb);
+
+    assert(bb.height > 20, "tall");    
+    assert(bb.width > 30, "wide");    
 
     await new Promise(r => setTimeout(r, 10000));
     browser.close();
