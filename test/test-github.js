@@ -12,7 +12,7 @@ describe('Execute Actions', function () {
       args: [
         `--disable-extensions-except=${extension}`,
         `--load-extension=${extension}`,
-        // '--disable-setuid-sandbox',
+        '--disable-setuid-sandbox',
         '--no-sandbox',
       ],
       headless: false,
