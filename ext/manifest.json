@@ -1,0 +1,75 @@
+{
+  "manifest_version": 2,
+
+  "name": "blind-reviews",
+  "version": "1.3.0",
+
+  "description": "Blind Reviews Experiment",
+  "homepage_url": "https://github.com/zombie/blind-reviews/",
+
+  "applications": {
+    "gecko": {
+      "id": "blind-reviews@allizom.org"
+    }
+  },
+
+  "icons": {
+    "96": "icon.png"
+  },
+
+  "permissions": ["storage"],
+
+  "web_accessible_resources": [
+    "icon.png"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "run_at": "document_start",
+      "css": ["github/blind.css"],
+      "js": ["github/common.js"]
+    },
+
+    {
+      "matches": [
+        "https://bugzilla.mozilla.org/request.cgi*",
+        "https://bugzilla-dev.allizom.org/request.cgi*"
+      ],
+      "run_at": "document_end",
+      "css": ["bugzilla/blind.css"],
+      "js": ["bugzilla/common.js", "bugzilla/request.js"]
+    }, {
+      "matches": [
+        "https://bugzilla.mozilla.org/show_bug.cgi*",
+        "https://bugzilla-dev.allizom.org/show_bug.cgi*"
+      ],
+      "run_at": "document_end",
+      "css": ["bugzilla/blind.css"],
+      "js": ["bugzilla/common.js", "bugzilla/show_bug.js"]
+    }, {
+      "matches": [
+        "https://bugzilla.mozilla.org/page.cgi?id=splinter.html*",
+        "https://bugzilla-dev.allizom.org/page.cgi?id=splinter.html*"
+      ],
+      "run_at": "document_end",
+      "css": ["bugzilla/blind.css"],
+      "js": ["bugzilla/common.js", "bugzilla/splinter.js"]
+    }, {
+      "matches": [
+        "https://bugzilla.mozilla.org/page.cgi?id=mydashboard.html*",
+        "https://bugzilla-dev.allizom.org/page.cgi?id=mydashboard.html*"
+      ],
+      "run_at": "document_end",
+      "css": ["bugzilla/blind.css"],
+      "js": ["bugzilla/common.js", "bugzilla/mydashboard.js"]
+    }, {
+      "matches": [
+        "https://reviewboard.mozilla.org/r/*"
+      ],
+      "run_at": "document_end",
+      "css": ["bugzilla/blind.css"],
+      "js": ["bugzilla/reviewboard.js"]
+    }
+  ]
+}

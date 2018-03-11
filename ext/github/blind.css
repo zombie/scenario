@@ -1,0 +1,55 @@
+
+li.js-issue-row.br-blind span.opened-by::after,
+span.br-redacted::after {
+  content: "[redacted]";
+}
+
+li.js-notification.br-blind div.AvatarStack .tooltipped,
+li.js-issue-row.br-blind span.opened-by > a,
+body:not(.br-blinded) span.br-redacted,
+body.br-blinded .br-author {
+    display: none !important;
+}
+
+li.js-notification.br-blind div.AvatarStack::after,
+body.br-blinded span.br-avatar {
+  width: 16px;
+  height: 16px;
+  background: url("../icon.png") 0/contain;
+  display: inline-block;
+  vertical-align: sub;
+}
+body.br-blinded div.timeline-comment-avatar > span.br-avatar {
+  width: 42px;
+  height: 42px;
+}
+body.br-blinded div.participation-avatars span.br-avatar {
+  width: 24px;
+  height: 24px;
+  margin: 4px;
+}
+
+#br-toggle {
+  display: inline-block;
+  margin: 0 3ex 0 1ex;
+}
+#br-toggle div>button::before {
+  content: "Redact ";
+}
+body.br-blinded #br-toggle div>button::before {
+  content: "Uncover ";
+}
+
+#br-toggle > span > button {
+  float: left;
+  width: 24px;
+  height: 24px;
+  margin: -1px 1px 0 0;
+  background: url(../icon.png) 0/contain;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  body.br-blinded span.br-avatar, #br-toggle > span > button {
+    background: url(chrome-extension://__MSG_@@extension_id__/icon.png) 0/contain;
+  }
+}
