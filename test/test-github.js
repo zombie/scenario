@@ -1,38 +1,39 @@
-
-const {resolve} = require("path");
-const extension = resolve(__dirname, "..");
+"use strict";
 
 const {expect} = require("chai");
+const {resolve} = require("path");
 const {launch} = require('puppeteer');
 
-const launched = launch({
-  headless: false,
-  args: [
-    '--no-sandbox',
-    `--load-extension=${extension}`,
-    `--disable-extensions-except=${extension}`,
-  ],
-});
+const HOST = "https://github.com/";
+const UNPACKED = resolve(__dirname, "..");
 
-async function newPage(url) {
-  const browser = await launched;
-  const page = await browser.newPage();
-  await page.goto(url);
-  return page;
-}
+module.exports = {
 
-after(async () => {
-  (await launched).close();
-});
+  async before() {
+    this.browser = await launch({
+      headless: false,
+      args: [
+        '--no-sandbox',
+        `--load-extension=${UNPACKED}`,
+        `--disable-extensions-except=${UNPACKED}`,
+      ],
+    });
+    this.page = await this.browser.newPage();
+  },
 
-describe('Execute Actions', function() {
-  it('should run the scenario with Puppeteer', async function() {
-    const page = await newPage("https://github.com/zombie/blind-reviews/pull/1");
-    
-    const br = await page.$("#br-toggle");
-    const bb = await br.boundingBox();
+  "Pull Request page": {
+    async before() {
+      await this.page.goto(`${HOST}/zombie/blind-reviews/pull/29`);
+    },
 
-    expect(bb.width).to.be.above(20);
-    expect(bb.height).to.be.above(20);
-  });
-});
+    async "Main toggle added and visible"() {
+      const toggle = await this.page.$("#br-toggle");
+      const box = await toggle.boundingBox();
+      expect(box.width).to.be.above(30);
+    },
+  },
+
+  async after() {
+    await this.browser.close();    
+  }
+};
