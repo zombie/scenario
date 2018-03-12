@@ -2,36 +2,37 @@
 const {resolve} = require("path");
 const extension = resolve(__dirname, "..");
 
-const assert = require('assert');
-const puppeteer = require('puppeteer');
+const {expect} = require("chai");
+const {launch} = require('puppeteer');
 
-let browser;
+const launched = launch({
+  headless: false,
+  args: [
+    '--no-sandbox',
+    `--load-extension=${extension}`,
+    `--disable-extensions-except=${extension}`,
+  ],
+});
 
-before(async () => {
-  browser = await puppeteer.launch({
-    headless: false,
-    args: [
-      '--no-sandbox',
-      `--load-extension=${extension}`,
-      `--disable-extensions-except=${extension}`,
-    ],
-  });
+async function newPage(url) {
+  const browser = await launched;
+  const page = await browser.newPage();
+  await page.goto(url);
+  return page;
+}
+
+after(async () => {
+  (await launched).close();
 });
 
 describe('Execute Actions', function() {
-  this.timeout(10000);
   it('should run the scenario with Puppeteer', async function() {
-    const page = await browser.newPage();
-    await page.goto('https://github.com/zombie/blind-reviews/pull/1');
+    const page = await newPage("https://github.com/zombie/blind-reviews/pull/1");
     
-
     const br = await page.$("#br-toggle");
     const bb = await br.boundingBox();
 
-    assert(bb.height > 20, "tall");    
-    assert(bb.width > 30, "wide");    
-
-    browser.close();  
-    console.log(' 🎉 ');
+    expect(bb.width).to.be.above(20);
+    expect(bb.height).to.be.above(20);
   });
 });
